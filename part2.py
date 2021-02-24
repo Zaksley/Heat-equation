@@ -19,7 +19,18 @@ variables n'ont pas des noms faciles
 ### Question 3 : Implémentation de la méthode du gradient conjugué
 
 
-# Renvoie la solution de l'équation Ax = b sous forme de vecteur
+
+"""
+    @brief Cette fonction met en oeuvre la méthode du Gradient Conjugué.
+    Résolution de Ax = b, avec x supposée inconnue.
+
+    @param A : Matrice numpy symétrique définie positive.
+    @param b : Vecteur numpy de même hauteur que A.
+    @param x : Vecteur numpy représentant l'origine de la descente de gradient. 
+    @param imax : Le nombre d'itération maximale. 
+    @param imax : La précision servant à stopper la boucle d'itération. 
+    @return Le vecteur x solution de l'équation Ax = b avec la précision spécifiée.
+"""
 def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
 
     # Initialisation de r0 et p0
