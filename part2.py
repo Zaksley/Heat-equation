@@ -19,7 +19,18 @@ variables n'ont pas des noms faciles
 ### Question 3 : Implémentation de la méthode du gradient conjugué
 
 
-# Renvoie la solution de l'équation Ax = b sous forme de vecteur
+
+"""
+    @brief Cette fonction met en oeuvre la méthode du Gradient Conjugué.
+    Résolution de Ax = b, avec x supposée inconnue.
+
+    @param A : Matrice numpy symétrique définie positive.
+    @param b : Vecteur numpy de même hauteur que A.
+    @param x : Vecteur numpy représentant l'origine de la descente de gradient. 
+    @param imax : Le nombre d'itération maximale. 
+    @param imax : La précision servant à stopper la boucle d'itération. 
+    @return Le vecteur x solution de l'équation Ax = b avec la précision spécifiée.
+"""
 def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
 
     # Initialisation de r0 et p0
@@ -48,17 +59,33 @@ def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
     return x
 
 
+def print_res(msg,res):
+    if res :
+        print("[SUCCESS] --> ",end='')
+    else :
+        print("[FAILED] --> ",end='')
+    print(msg)
+
 # Tests de comportement
-matrice_test = np.array([[4., -2., -4.],
-                    [-2., 10., 5.],
-                    [-4., 5.,  6.]])
+matrice_test_1 = np.array([[4., -2., -4.],
+                           [-2., 10., 5.],
+                           [-4., 5.,  6.]])
+matrice_test_2 = np.array([[4., 2., -9.],
+                           [2., 10., -5.],
+                           [-9., -5.,  6.]])
+vector_test_1 = np.array([1., 2., 4.])
+vector_test_2 = np.array([1., 4., 8.])
+zeros_1 = np.zeros(3)
+zeros_2 = np.zeros(3)
 
-vector_test = np.array([1., 2., 4.])
-
-zeros = np.zeros(3)
-
-print(conjugateGradient(matrice_test, vector_test, zeros))
-
+res1 = conjugateGradient(matrice_test_1, vector_test_1, zeros_1)
+res2 = conjugateGradient(matrice_test_2, vector_test_2, zeros_2)
+print(res1)
+print(res2)
+print_res("Conjugate gradient 1, is result close to [ 3.861, -1.111,  4.167].", 
+          np.around(res1[0],3) == 3.861 and np.around(res1[1],3) == -1.111 and np.around(res1[2],3) == 4.167)
+print_res("Conjugate gradient 2, is result close to [-1.570,  0.348, -0.732].", 
+          np.around(res2[0],3) == -1.570 and np.around(res2[1],3) == 0.348 and np.around(res2[2],3) == -0.732)
 
 ### Question 4 : Implémentation de la méthode du gradient conjugué avec préconditionneur
 
