@@ -1,0 +1,27 @@
+# d2T / d2x + d2T /d2y  = f( x, y)
+# [d2T / d2x + d2T /d2y  = f( x, y)] i , j
+# [t(i+1 , j) + t(i-1 , j)+t(i , j+1)+t(i , j-1) -4t(i , j) ] / h2 = [f(x , y )](i , j)
+#on a appliqué taylor a i-(&i) 
+# Pour montrer que le systeme peut etre ecrit de la façon decrite Ax=b 
+# en prenant la derniere formule : 
+#  [t(i+1 , j) + t(i-1 , j)+t(i , j+1)+t(i , j-1) -4t(i , j) ] / h2 = [f(x , y )](i , j) 
+# les indices des coefficients varient entre [ i-1 , i+1 ] et [ j-1 , j+1] 
+#ce qui induit nécessairement l'utilisation des blocs tridiagonale . 
+#là on est cool .. juste vision generale des trucs 
+# on prend Ax=b avec b la matrice qui représente f(x,y) et A la matrice de la forme 1/h2 T- 
+# on montre que [Ax](i j ) =  [t(i+1 , j) + t(i-1 , j)+t(i , j+1)+t(i , j-1) -4t(i , j) ] 
+# pour générer A : 
+# il faut avoir T- ( reshape cool ca passe )
+# il faut avoir Mc ( matrice tridiagonale par blocs ? de taille N )  
+
+
+
+
+wait taylor il dit quoi ! on note d la dérivée partielle ( facilier le truc ^^ ) 
+dT(x , y) / dx = T ( x , y ) - T ( x-h , y ) / h = T ( i , j) - T ( i-1 , j ) / h 
+mais apparemment on a utilisé l'approximation centrée de la dérivée : 
+donc d² T( x , y ) / d²x = T ( x+&x  , y ) - 2T ( x , y ) + T ( x-&x , y ) / (&x)² 
+on trouve bien la formule 
+T ( i , j ) = 4 *b(i , j ) * h² - t(i+1 , j) - t(i-1 , j)-t(i , j+1)-t(i , j-1))  
+d'ou 
+T(i , j) = 4 *b(i , j ) * h² ( ctse) - c(i+1 , j)*t(i+1 , j) -a(i-1 , j)  
