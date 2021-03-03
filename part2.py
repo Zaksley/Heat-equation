@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math as m
 
-### Question 1 : Par quels aspects cette implementation ne respecte t’elle pas des standards de codage tres sains ?
+### Question 1 : Par quels aspects cette implementation ne respecte t'elle pas des standards de codage tres sains ?
 """
 Ap = A*p
 variables n'ont pas des noms faciles
@@ -25,7 +25,7 @@ variables n'ont pas des noms faciles
     Resolution de Ax = b, avec x supposee inconnue.
 
     @param A : Matrice numpy symetrique definie positive.
-    @param b : Vecteur numpy de même hauteur que A.
+    @param b : Vecteur numpy de meme hauteur que A.
     @param x : Vecteur numpy representant l'origine de la descente de gradient. 
     @param imax : Le nombre d'iteration maximale. 
     @param imax : La precision servant a stopper la boucle d'iteration. 
@@ -34,7 +34,8 @@ variables n'ont pas des noms faciles
 def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
 
     # Initialisation de r0 et p0
-    r = b - np.dot(A, x)
+     
+    r = b - np.dot ( A , x)
     p = r
     rsquare_old = np.dot(r, np.transpose(r))
 
@@ -55,7 +56,7 @@ def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
         p = r + p * (rsquare_new/rsquare_old)
         rsquare_old = rsquare_new
 
-    # La precision n'a pas ete atteinte, on renvoie quand même le resultat
+    # La precision n'a pas ete atteinte, on renvoie quand meme le resultat
     return x
 
 
