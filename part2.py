@@ -37,20 +37,22 @@ def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
      
     r = b - np.dot ( A , x)
     p = r
-    rsquare_old = np.dot(r, np.transpose(r))
+    rsquare_old = np.dot(r, r.T)
 
     for i in range(imax): #Nombre d'iterations arbitraire
 
         # Calcul de alpha_k+1
         Ap = np.dot(A, p)
-        alpha = rsquare_old / np.dot(np.transpose(p), Ap)
+        alpha = rsquare_old / np.dot(p.T, Ap)
         # Mise a jour de x et calcul de r_k+1
-        x += alpha * p
-        r -= alpha * Ap
-        rsquare_new = np.dot(r, np.transpose(r))
+        x += np.dot(alpha, p)
+        r -= np.dot(alpha, Ap)
+        
+        rsquare_new = np.dot(r.T, r)
 
         # On a atteint la precision attendue
-        if(m.sqrt(rsquare_new) < precision): return x
+        if(m.sqrt(rsquare_new) < precision): 
+            return x
 
         # Sinon, calcul de p_k+1 et passage a l'iteration suivante
         p = r + p * (rsquare_new/rsquare_old)
@@ -68,25 +70,26 @@ def print_res(msg,res):
     print(msg)
 
 # Tests de comportement
-matrice_test_1 = np.array([[4., -2., -4.],
-                           [-2., 10., 5.],
-                           [-4., 5.,  6.]])
-matrice_test_2 = np.array([[4., 2., -9.],
-                           [2., 10., -5.],
-                           [-9., -5.,  6.]])
-vector_test_1 = np.array([1., 2., 4.])
-vector_test_2 = np.array([1., 4., 8.])
-zeros_1 = np.zeros(3)
-zeros_2 = np.zeros(3)
+def tests():
+    matrice_test_1 = np.array([[4., -2., -4.],
+                            [-2., 10., 5.],
+                            [-4., 5.,  6.]])
+    matrice_test_2 = np.array([[4., 2., -9.],
+                            [2., 10., -5.],
+                            [-9., -5.,  6.]])
+    vector_test_1 = np.array([1., 2., 4.])
+    vector_test_2 = np.array([1., 4., 8.])
+    zeros_1 = np.zeros(3)
+    zeros_2 = np.zeros(3)
 
-res1 = conjugateGradient(matrice_test_1, vector_test_1, zeros_1)
-res2 = conjugateGradient(matrice_test_2, vector_test_2, zeros_2)
-print(res1)
-print(res2)
-print_res("Conjugate gradient 1, is result close to [ 3.861, -1.111,  4.167].", 
-          np.around(res1[0],3) == 3.861 and np.around(res1[1],3) == -1.111 and np.around(res1[2],3) == 4.167)
-print_res("Conjugate gradient 2, is result close to [-1.570,  0.348, -0.732].", 
-          np.around(res2[0],3) == -1.570 and np.around(res2[1],3) == 0.348 and np.around(res2[2],3) == -0.732)
+    res1 = conjugateGradient(matrice_test_1, vector_test_1, zeros_1)
+    res2 = conjugateGradient(matrice_test_2, vector_test_2, zeros_2)
+    print(res1)
+    print(res2)
+    print_res("Conjugate gradient 1, is result close to [ 3.861, -1.111,  4.167].", 
+            np.around(res1[0],3) == 3.861 and np.around(res1[1],3) == -1.111 and np.around(res1[2],3) == 4.167)
+    print_res("Conjugate gradient 2, is result close to [-1.570,  0.348, -0.732].", 
+            np.around(res2[0],3) == -1.570 and np.around(res2[1],3) == 0.348 and np.around(res2[2],3) == -0.732)
 
 ### Question 4 : Implementation de la methode du gradient conjugue avec preconditionneur
 
