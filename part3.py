@@ -4,7 +4,6 @@ import math as math
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-
 def tridiag (N ):
     N2=N*N 
     A=np.diag ( [-4]*N2 ) 
@@ -16,7 +15,7 @@ def tridiag (N ):
     D=np.eye (N2 , N2 , N)
     E=D.T
     A=A+B+C+D+E 
-    A=A/(N+1)*(N+1)
+    A=A/((N+1)**2)
 
     return (A)
 
@@ -43,7 +42,8 @@ def b(N , f ):
     b=B.reshape ( N*N,1)
     return (b)
 
-b(4 , f)
+
+
 # resoudre le systeme dans le cas d'un radiateur mis au centre du carre sachant que f(x , y)  l'apport de chaleur exterieur en ce meme point : 
 #alors placer un radiateur au centre du carre
 # alors "normalement" , f( 1/2 , 1/2 ) = 1 et f( x , y) = 0 Vx, y != 1/2 
@@ -73,7 +73,9 @@ def graphe(N , f  ) :
         for j in range (0 , N ) : 
             Z=np.append (Z , temp[i*(N-1) + j ])
     fig = plt.figure()
-    plt.plot (X, Y, Z)
+    ax = plt.axes(projection='3d')
+    ax.view_init(40, -30)
+    ax.plot_surface(X, Y, Z)
     plt.show()
     plt.close
 
