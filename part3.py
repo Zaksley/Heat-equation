@@ -1,5 +1,8 @@
 import numpy as np 
 import numpy.linalg as linalg
+import math as math 
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 def tridiag (N ):
@@ -13,6 +16,7 @@ def tridiag (N ):
     D=np.eye (N2 , N2 , N)
     E=D.T
     A=A+B+C+D+E 
+    A=A/(N+1)*(N+1)
 
     return (A)
 
@@ -25,7 +29,7 @@ def tridiag (N ):
 def f(x,y) :
 
         if x in [1/2 , 3/4] and y in [1/2 , 3/4] :
-            return 1 
+            return -25 
         else :
            return 0 
 def b(N , f ):
@@ -51,10 +55,27 @@ from part2 import conjugateGradient
 def temperature ( N  , f ) :
     A=tridiag (N) # construction de A 
     B= b( N , f)
+    print ("la matrice de la fonction f est " , B )
     t=np.zeros ( (N,N)) 
     x=t.reshape ( N*N , 1 ) 
     return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
      
 
-N=4
-temperature ( N , f) 
+   
+   
+def graphe(N , f  ) :
+    VX = np.linspace(0, 1,  N)
+    VY = np.linspace(0, 1, N)
+    X,Y = np.meshgrid(VX, VY)
+    temp = temperature ( N , f ) 
+    Z=[] 
+    for i in range ( 0 , N) : 
+        for j in range (0 , N ) : 
+            Z=np.append (Z , temp[i*(N-1) + j ])
+    fig = plt.figure()
+    plt.plot (X, Y, Z)
+    plt.show()
+    plt.close
+
+graphe ( 4 , f )
+

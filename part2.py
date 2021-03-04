@@ -165,14 +165,14 @@ triangulaire_test = np.array([[6., -2., -1.],
 #                                    [-16.,  53.,  18.],
 #                                    [ -9.,  18.,  81.]])
 
-res3 = conjugateGradientPrecond(matrice_test_1, triangulaire_test, vector_test_1, zeros_1)
-res4 = conjugateGradientPrecond(matrice_test_2, triangulaire_test, vector_test_2, zeros_2)
-print(res3)
-print(res4)
-print_res("Conjugate gradient (Precond) 1, is close to [ 3.861, -1.111,  4.167].",
-          np.around(res3[0],3) == 3.861 and np.around(res3[1],3) == -1.111 and np.around(res3[2],3) == 4.167)
-print_res("Conjugate gradient (Precond) 2, is close to [-1.570,  0.348, -0.732].",
-          np.around(res4[0],3) == -1.570 and np.around(res4[1],3) == 0.348 and np.around(res4[2],3) == -0.732)
+#res3 = conjugateGradientPrecond(matrice_test_1, triangulaire_test, vector_test_1, zeros_1)
+#res4 = conjugateGradientPrecond(matrice_test_2, triangulaire_test, vector_test_2, zeros_2)
+#print(res3)
+#print(res4)
+#print_res("Conjugate gradient (Precond) 1, is close to [ 3.861, -1.111,  4.167].",
+ #         np.around(res3[0],3) == 3.861 and np.around(res3[1],3) == -1.111 and np.around(res3[2],3) == 4.167)
+#print_res("Conjugate gradient (Precond) 2, is close to [-1.570,  0.348, -0.732].",
+ #         np.around(res4[0],3) == -1.570 and np.around(res4[1],3) == 0.348 and np.around(res4[2],3) == -0.732)
 
 
 
