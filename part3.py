@@ -64,14 +64,22 @@ def temperature ( N  , f ) :
    
    
 def graphe(N , f  ) :
-    VX = np.linspace(0, 1,  N)
-    VY = np.linspace(0, 1, N)
+   # VX = np.linspace(0, 1,  N)
+   # VY = np.linspace(0, 1, N)
+   # X,Y = np.meshgrid(VX, VY)
+  
+   # Z=t ( X , Y , N , f )
+    VX = np.linspace(0, 1.0, N)
+    VY = np.linspace(0, 1.0, N)
     X,Y = np.meshgrid(VX, VY)
-    temp = temperature ( N , f ) 
-    Z=[] 
-    for i in range ( 0 , N) : 
-        for j in range (0 , N ) : 
-            Z=np.append (Z , temp[i*(N-1) + j ])
+    x=[i for i in range (0 , N )] 
+    y=[i for i in range ( 0 , N ) ] 
+    
+    def t( i , j  ) : 
+        temp = temperature ( N , f ) 
+        temp=temp.reshape (N , N )
+        return ( temp [i][j])
+    Z = t(x , y)
     fig = plt.figure()
     ax = plt.axes(projection='3d')
     ax.view_init(40, -30)
