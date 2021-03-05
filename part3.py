@@ -18,9 +18,9 @@ def tridiag (N ):
     D=np.eye (N2 , N2 , N)
     E=D.T
     A=A+B+C+D+E 
-    print (A) 
+    
     A=A/((N+1)**2)
-    print (A)
+  
 
     return (A)
 
@@ -32,7 +32,7 @@ tridiag ( 4 )
 #b = reshape de B 
 def f(x,y) :
 
-        if float(x) in [0.5 , float(4/7)] or  float(y) in [0.5 , float(4/7)] :
+        if float(x) in [0.5 , float(4/7)] and float(y) in [0.5 , float(4/7)] :
             return -25  
         else : 
            return 0 
@@ -45,10 +45,10 @@ def b(N , f ):
             B[i][j] = f( X[i] , Y[j]) 
 
     
-    print ("la matrice de lafocntion" , B ) 
+   
     b=B.reshape ( N*N,1)
     return (b) 
-b(16 , f )
+
 
 
 
@@ -63,13 +63,18 @@ from part2 import conjugateGradient
 def temperature ( N  , f ) :
     A=tridiag (N) # construction de A 
     B= b( N , f)
-    t=np.zeros ( (N,N)) 
+    t=np.eye  (N )
     x=t.reshape ( N*N , 1 ) 
+    tmp=conjugateGradient( A , B , x, imax=10**6, precision=1e-10)
+    tmp=tmp.reshape( N ,N )
+   # for i in range ( 0 , N) :
+    #        if ( tmp[i][i]!= 0 ) :
+     #           print (" l'indice diagonale non nulle   " , i )
     return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
      
 
-   
-   
+
+
 def graphe3d(N , f  ) :
     VX = np.linspace(0, 1.0, N)
     VY = np.linspace(0, 1.0, N)
@@ -80,7 +85,7 @@ def graphe3d(N , f  ) :
     def t( i , j  ) : 
         temp = temperature ( N , f ) 
         temp=temp.reshape (N , N )
-        return ( temp [i][j] )
+        return temp[i][j]
     Z = t(x , y)
     fig = plt.figure()
     ax = plt.axes(projection='3d')
@@ -89,7 +94,7 @@ def graphe3d(N , f  ) :
     plt.show()
     input('press <ENTER> to continue') 
     plt.close
-graphe3d (  8 , f  )
+graphe3d (  20 , f  )
 def imagepix ( f , N ) :
     
     size = (N,N)
@@ -98,15 +103,19 @@ def imagepix ( f , N ) :
     temp = temperature ( N , f ) 
     temp=temp.reshape (N , N )
     maxi=np.amax ( temp )
-    print ("le max" , np.amax ( temp ))
+    
     for i in range(size[0]):
         for j in range(size[1]):
-                                    
-            pix[i,j] = ( int ( temp[i][j] / maxi  *255 ) , int (temp[i][j] / maxi* 69 ) ,  0)  
+            if ( temp[i][j] < 1 ) :
+                pix[i , j] = ( int (temp[i][j] *255) , int (temp[i][j]*69) , 0 ) 
+            else : 
+                pix[i,j] = ( int ( temp[i][j] / maxi  *255 ) , int (temp[i][j] / maxi* 69 ) ,  0)  
+            if ( temp[i][j] *255 < 1) :
+                 pix[i , j] = ( int (temp[i][j] *255 *10 )*(-1) , int (temp[i][j]*69 *10) * (-1) , 0 )
           
     im.save('ima4.png')
 
-imagepix ( f , 20)
+imagepix ( f , 20 )
 def image ( f , N) : 
     rouge = [0.807, 0.066, 0.149]
     jaune = [0.802, 0.101, 0.066] 
@@ -118,9 +127,14 @@ def image ( f , N) :
     maxi=np.amax ( temp )
     for i in range (0, N ) : 
         for j in range (0, N) : 
-            
-            image[i][j] = [ temp[i][j] / maxi , temp[i][j] / maxi* 69/255  ,  0 ] 
+            if ( temp[i][j] < 1 and temp[i][j] > 0 ) :
+                image[i][j] = ( temp[i][j]  , temp[i][j]*69/255 , 0 ) 
+            else : 
+               image[i][j] = ( temp[i][j] / maxi   , temp[i][j] / maxi* 69/255  ,  0)  
+            if ( temp[i][j] *255 < 0) :
+                image[i][j]= ( temp[i][j] *(-1) , temp[i][j] *69/255 * (-1) , 0 )
+             
     plt.imsave ('image.png' , image)
     
     plt.show()
-image ( f , 100)
+image ( f , 20)
