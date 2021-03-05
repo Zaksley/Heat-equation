@@ -65,10 +65,6 @@ def temperature ( N  , f ) :
     B= b( N , f)
     t=np.zeros ( (N,N)) 
     x=t.reshape ( N*N , 1 ) 
-    t=conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
-    for i in range (0 , N*N) :  
-            if t[i] != 0 : 
-                print ( "temperature non nulle en " , i  )
     return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
      
 
