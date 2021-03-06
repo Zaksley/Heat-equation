@@ -30,24 +30,18 @@ tridiag ( 4 )
 # B=fromfunction(f,dim) 
 #
 #b = reshape de B 
-def f(x,y) :
+#def f(x,y, N) :
 
-        if float(x) in [0.5 , float(4/7)] and float(y) in [0.5 , float(4/7)] :
-            return -25  
-        else : 
-           return 0 
-def b(N , f ):
-    X=np.linspace ( 0 , 1 , N+1 ) 
-    Y=np.linspace ( 0 , 1 , N+1 )
-    B=np.zeros ( (N,N) ) ; 
-    for i in range ( 0 , N) :
-        for j in range ( 0 , N ) :
-            B[i][j] = f( X[i] , Y[j]) 
-
-    
-   
-    b=B.reshape ( N*N,1)
-    return (b) 
+ #       if x in [ N//2 , 3*N//4 ] and y in [ N//2 , 3*N//4 ] :
+  #          return -25  
+   #     else : 
+    #       return 0 
+def b_centre(N , T ):
+   # X=np.linspace ( 0 , 1 , N+1 ) 
+   # Y=np.linspace ( 0 , 1 , N+1 )
+    B=np.zeros ( (N*N) ) ; 
+    B[ (N//2)*N + (N//2)] = T*(-1) 
+    return (B) 
 
 
 
@@ -60,18 +54,19 @@ def b(N , f ):
 
 
 from part2 import conjugateGradient 
-def temperature ( N  , f ) :
+def temperature_centre ( N  , T ) :
     A=tridiag (N) # construction de A 
-    B= b( N , f)
+    B= b_centre( N , T)
     t=np.eye  (N )
     x=t.reshape ( N*N , 1 ) 
-    tmp=conjugateGradient( A , B , x, imax=10**6, precision=1e-10)
-    tmp=tmp.reshape( N ,N )
+    #tmp=conjugateGradient( A , B , x, imax=10**6, precision=1e-10)
+    #tmp=tmp.reshape( N ,N )
    # for i in range ( 0 , N) :
     #        if ( tmp[i][i]!= 0 ) :
      #           print (" l'indice diagonale non nulle   " , i )
-    return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
-     
+    #return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
+    #print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
+    return linalg.solve ( A , B )
 
 
 
@@ -94,34 +89,35 @@ def graphe3d(N , f  ) :
     plt.show()
     input('press <ENTER> to continue') 
     plt.close
-graphe3d (  20 , f  )
-def imagepix ( f , N ) :
+
+def imagepix_centre ( T, N ) :
     
     size = (N,N)
-    im = Image.new('RGB',size)
+    im = Image.new('RGB',(N , N ))
     pix = im.load() 
-    temp = temperature ( N , f ) 
+    temp = temperature_centre( N , T ) 
     temp=temp.reshape (N , N )
+    temp=temp.T
     maxi=np.amax ( temp )
     
-    for i in range(size[0]):
-        for j in range(size[1]):
+    for i in range(0 , size[0]):
+        for j in range( 0 , size[1]):
             if ( temp[i][j] < 1 ) :
                 pix[i , j] = ( int (temp[i][j] *255) , int (temp[i][j]*69) , 0 ) 
             else : 
                 pix[i,j] = ( int ( temp[i][j] / maxi  *255 ) , int (temp[i][j] / maxi* 69 ) ,  0)  
             if ( temp[i][j] *255 < 1) :
                  pix[i , j] = ( int (temp[i][j] *255 *10 )*(-1) , int (temp[i][j]*69 *10) * (-1) , 0 )
-          
-    im.save('ima4.png')
+           # print ( "pixel " , i , j , "est " , pix[i , j ] , "\n" )
+    im.save('radiateuraucentre.png')
 
-imagepix ( f , 20 )
-def image ( f , N) : 
+
+def image ( T, N) : 
     rouge = [0.807, 0.066, 0.149]
     jaune = [0.802, 0.101, 0.066] 
     # Image de départ, entièrement noire
     image = np.zeros((N, N,3)) 
-    temp = temperature ( N , f ) 
+    temp = temperature_centre ( N , T ) 
     temp=temp.reshape (N , N )
     # Remplissage  
     maxi=np.amax ( temp )
@@ -137,4 +133,59 @@ def image ( f , N) :
     plt.imsave ('image.png' , image)
     
     plt.show()
-image ( f , 20)
+
+
+
+
+def imagepix_cote ( T , N ) :
+    
+    size = (N,N)
+    im = Image.new('RGB',(N , N ))
+    pix = im.load() 
+    temp = temperature_cote ( N , T ) 
+    temp=temp.reshape (N , N )  
+    maxi=np.amax ( temp )
+    
+    for i in range(0 , size[0]):
+        for j in range( 0 , size[1]):
+            if ( temp[i][j] < 1 and temp[i][j] > 0 ) :
+                pix[i , j] = ( int (temp[i][j] *255) , int (temp[i][j]*69) , 0 ) 
+            else : 
+                pix[i,j] = ( int ( temp[i][j] / maxi  *255 ) , int (temp[i][j] / maxi* 69 ) ,  0)  
+            if ( temp[i][j] *255 < 0 ) :
+                 pix[i , j] = ( int (temp[i][j] *255 *10 )*(-1) , int (temp[i][j]*69 *10) * (-1) , 0 )
+           # print ( "pixel " , i , j , "est " , pix[i , j ] , "\n" )
+    im.save('radiateurcote.png')
+
+
+
+#cote
+def b_cote(N , T ):
+   # X=np.linspace ( 0 , 1 , N+1 ) 
+   # Y=np.linspace ( 0 , 1 , N+1 )
+    B=np.zeros ( (N*N) ) 
+    for i in range ( N) :
+        B[ (N-1)*N + i ] = T*(-1) 
+    return (B) 
+
+
+
+
+def temperature_cote ( N  , T ) :
+    A=tridiag (N) # construction de A 
+    B= b_cote( N , T)
+    t=np.eye  (N )
+    x=t.reshape ( N*N , 1 ) 
+    #tmp=conjugateGradient( A , B , x, imax=10**6, precision=1e-10)
+    #tmp=tmp.reshape( N ,N )
+   # for i in range ( 0 , N) :
+    #        if ( tmp[i][i]!= 0 ) :
+     #           print (" l'indice diagonale non nulle   " , i )
+    #return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
+   # print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
+    return linalg.solve ( A , B )
+
+
+
+imagepix_cote ( 100 , 20 ) 
+imagepix_centre ( 100,20)
