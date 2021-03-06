@@ -36,7 +36,7 @@ def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
     r = b - np.dot(A, x)
     p = r
     rsquare_old = np.dot(r, r.T)
-
+    
     for i in range(imax): #Nombre d'iterations arbitraire
 
         # Calcul de alpha_k+1
@@ -57,6 +57,26 @@ def conjugateGradient(A, b, x, imax=10**6, precision=1e-10):
         rsquare_old = rsquare_new
 
     # La precision n'a pas ete atteinte, on renvoie quand même le resultat
+    return x
+
+def conjugateGradient2(A, b, x_0, imax=10**6, precision=1e-10):
+    r = b - np.dot(A,x_0)
+    p = r
+    x = x_0
+    print("DEB")
+    for i in range(imax): #Nombre d'iterations arbitraire
+        print(r.shape)
+        a_k = (np.dot(r.T,r))/(np.dot(p.T,np.dot(A,p)))
+        x_next = x + np.dot(a_k,p)
+        r_next = r - np.dot(a_k,np.dot(A,p))
+        print(r_next.shape)
+        if m.sqrt(r_next) < precision: 
+            return x_next
+        b_k = (np.dot(r_next.T,r_next))/(np.dot(r.T,r))
+        p = r_next + np.dot(b_k,p)
+        #passage au k+1
+        r = r_next
+        x = x_next
     return x
 
 
@@ -88,6 +108,21 @@ def tests():
             np.around(res1[0],3) == 3.861 and np.around(res1[1],3) == -1.111 and np.around(res1[2],3) == 4.167)
     print_res("Conjugate gradient 2, is result close to [-1.570,  0.348, -0.732].", 
             np.around(res2[0],3) == -1.570 and np.around(res2[1],3) == 0.348 and np.around(res2[2],3) == -0.732)
+
+from part1 import symetrik_generator
+import random
+ReelA = symetrik_generator(random.randint(0, 10),10)
+print(ReelA)
+Reelx = np.array([random.uniform(0, 10) for iter in range(10)])
+print(Reelx)
+Reelb = np.dot(ReelA,Reelx)
+print(Reelb)
+t=np.zeros((10,1))
+tmp_x = t #.reshape( 50*50 , 1 )
+print(tmp_x.shape)
+res_x = conjugateGradient2(ReelA,Reelb,tmp_x)
+print( np.allclose(np.dot(ReelA, res_x), Reelb))
+tmp_x = np.zeros(j) 
 
 ### Question 4 : Implementation de la methode du gradient conjugue avec preconditionneur
 
