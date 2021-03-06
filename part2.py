@@ -96,21 +96,32 @@ def tests():
     @brief Cette fonction implemente le Pivot de Gauss une résolution de systeme lineaire.
     Resolution de Tx = b, avec x supposee inconnue.
 
-    @param T : Matrice numpy triangulaire supérieure.
+    @param T : Matrice numpy triangulaire.
     @param b : Vecteur numpy de même hauteur que T.
+@param sup : 1 si T est superieure, 0 si elle est inferieure
     @return Le vecteur x solution de l'equation Tx = b.
 """
-def pivotGauss(T,b):
+def pivotGauss(T,b,sup=1):
     n = np.size(b)
     x = np.zeros(n)
 
-    for i in range(n-1, -1, -1):
-        tx = 0
+    if(sup == 1): #T est triangulaire superieure
+        for i in range(n-1, -1, -1):
+            tx = 0
 
-        for j in range(i+1, n):
-            tx +=  T[i][j]*x[j]
+            for j in range(i+1, n):
+                tx +=  T[i][j]*x[j]
 
-        x[i] = (b[i] - tx) / T[i][i]
+            x[i] = (b[i] - tx) / T[i][i]
+
+    else: #T est triangulaire inferieure
+        for i in range(n):
+            tx = 0
+
+            for j in range(i):
+                tx += T[i][j]*x[j]
+
+            x[i] = (b[i] - tx) / T[i][i]
 
     return x
 
@@ -132,7 +143,8 @@ def conjugateGradientPrecond(A, T, b, x, imax=10**6, precision=1e-10):
     r = b - np.dot(A, x)
     # On utilise le pivot de Gauss pour ne pas avoir a calculer M^-1
     # On passe pour l'instant T en parametre, mais on peut le changer pour M avec les fonctions de la partie 1
-    z = pivotGauss(T, r)
+    z = pivotGauss(T, r, 1)
+    z = pivotGauss(np.transpose(T), z, 0)
     p = z
     rsquare_old = np.dot(r, np.transpose(z))
 
@@ -151,7 +163,8 @@ def conjugateGradientPrecond(A, T, b, x, imax=10**6, precision=1e-10):
         if(m.sqrt(rsquare_new) < precision): return x
 
         # Sinon, calcul de z_k+1, p_k+1 et passage a l'iteration suivante
-        z = pivotGauss(T, r)
+        z = pivotGauss(T, r, 1)
+        z = pivotGauss(np.transpose(T), z, 0)
         p = z + p * (rsquare_new/rsquare_old)
         rsquare_old = rsquare_new
 
