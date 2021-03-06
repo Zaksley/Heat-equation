@@ -53,7 +53,7 @@ def b_centre(N , T ):
 # donc b de f est 
 
 
-from part2 import conjugateGradient 
+from part2 import conjugateGradient2 
 def temperature_centre ( N  , T ) :
     A=tridiag (N) # construction de A 
     B= b_centre( N , T)
@@ -64,9 +64,9 @@ def temperature_centre ( N  , T ) :
    # for i in range ( 0 , N) :
     #        if ( tmp[i][i]!= 0 ) :
      #           print (" l'indice diagonale non nulle   " , i )
-    #return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
+    return conjugateGradient2( A , B , x, imax=10**6, precision=1e-10) 
     #print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
-    return linalg.solve ( A , B )
+    # return linalg.solve ( A , B )
 
 
 
@@ -78,8 +78,8 @@ def graphe3d(N , f  ) :
     y=[i for i in range ( 0 , N ) ] 
     
     def t( i , j  ) : 
-        temp = temperature ( N , f ) 
-        temp=temp.reshape (N , N )
+        temp = temperature_centre( N , f ) 
+        temp=temp.reshape(N , N )
         return temp[i][j]
     Z = t(x , y)
     fig = plt.figure()
@@ -89,6 +89,7 @@ def graphe3d(N , f  ) :
     plt.show()
     input('press <ENTER> to continue') 
     plt.close
+
 
 def imagepix_centre ( T, N ) :
     
@@ -181,11 +182,11 @@ def temperature_cote ( N  , T ) :
    # for i in range ( 0 , N) :
     #        if ( tmp[i][i]!= 0 ) :
      #           print (" l'indice diagonale non nulle   " , i )
-    #return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
+    return conjugateGradient2( A , B , x, imax=10**6, precision=1e-10) 
    # print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
-    return linalg.solve ( A , B )
+    # return linalg.solve ( A , B )
 
 
 
-imagepix_cote ( 100 , 20 ) 
-imagepix_centre ( 100,20)
+imagepix_cote ( 100, 20) 
+imagepix_centre ( 100, 20)

@@ -26,7 +26,7 @@ def tridiag (N ):
 
 
 
-from part2 import conjugateGradient  , conjugateGradientPrecond
+from part2 import conjugateGradient2  , conjugateGradientPrecond
 def temperature_centresolve ( N  , T ) :
     A=tridiag (N) # construction de A 
     B= b_centre( N , T)
@@ -37,7 +37,7 @@ def temperature_centresolve ( N  , T ) :
    # for i in range ( 0 , N) :
     #        if ( tmp[i][i]!= 0 ) :
      #           print (" l'indice diagonale non nulle   " , i )
-    #return conjugateGradient( A , B , x, imax=10**6, precision=1e-10) 
+    # return conjugateGradient2( A , B , x, imax=10**6, precision=1e-10) 
     #print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
     return linalg.solve ( A , B ) 
 
@@ -63,7 +63,7 @@ def temperature_centregrad ( N  , T ) :
    # for i in range ( 0 , N) :
     #        if ( tmp[i][i]!= 0 ) :
      #           print (" l'indice diagonale non nulle   " , i )
-    return conjugateGradient( A ,  B , x, imax=10**6, precision=1e-10) 
+    return conjugateGradient2( A ,  B , x, imax=10**6, precision=1e-10) 
     
     
 

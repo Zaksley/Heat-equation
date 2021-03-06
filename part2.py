@@ -63,17 +63,14 @@ def conjugateGradient2(A, b, x_0, imax=10**6, precision=1e-10):
     r = b - np.dot(A,x_0)
     p = r
     x = x_0
-    print("DEB")
     for i in range(imax): #Nombre d'iterations arbitraire
-        print(r.shape)
         a_k = (np.dot(r.T,r))/(np.dot(p.T,np.dot(A,p)))
-        x_next = x + np.dot(a_k,p)
-        r_next = r - np.dot(a_k,np.dot(A,p))
-        print(r_next.shape)
-        if m.sqrt(r_next) < precision: 
+        x_next = x + (a_k * p)
+        r_next = r - (a_k * np.dot(A,p))
+        if np.linalg.norm(r_next) < precision: 
             return x_next
         b_k = (np.dot(r_next.T,r_next))/(np.dot(r.T,r))
-        p = r_next + np.dot(b_k,p)
+        p = r_next + (b_k * p)
         #passage au k+1
         r = r_next
         x = x_next
@@ -88,17 +85,17 @@ def print_res(msg,res):
     print(msg)
 
 # Tests de comportement
+matrice_test_1 = np.array([[4., -2., -4.],
+                        [-2., 10., 5.],
+                        [-4., 5.,  6.]])
+matrice_test_2 = np.array([[4., 2., -9.],
+                        [2., 10., -5.],
+                        [-9., -5.,  6.]])
+vector_test_1 = np.array([1., 2., 4.])
+vector_test_2 = np.array([1., 4., 8.])
+zeros_1 = np.zeros(3)
+zeros_2 = np.zeros(3)
 def tests():
-    matrice_test_1 = np.array([[4., -2., -4.],
-                            [-2., 10., 5.],
-                            [-4., 5.,  6.]])
-    matrice_test_2 = np.array([[4., 2., -9.],
-                            [2., 10., -5.],
-                            [-9., -5.,  6.]])
-    vector_test_1 = np.array([1., 2., 4.])
-    vector_test_2 = np.array([1., 4., 8.])
-    zeros_1 = np.zeros(3)
-    zeros_2 = np.zeros(3)
 
     res1 = conjugateGradient(matrice_test_1, vector_test_1, zeros_1)
     res2 = conjugateGradient(matrice_test_2, vector_test_2, zeros_2)
@@ -109,20 +106,21 @@ def tests():
     print_res("Conjugate gradient 2, is result close to [-1.570,  0.348, -0.732].", 
             np.around(res2[0],3) == -1.570 and np.around(res2[1],3) == 0.348 and np.around(res2[2],3) == -0.732)
 
-from part1 import symetrik_generator
-import random
-ReelA = symetrik_generator(random.randint(0, 10),10)
-print(ReelA)
-Reelx = np.array([random.uniform(0, 10) for iter in range(10)])
-print(Reelx)
-Reelb = np.dot(ReelA,Reelx)
-print(Reelb)
-t=np.zeros((10,1))
-tmp_x = t #.reshape( 50*50 , 1 )
-print(tmp_x.shape)
-res_x = conjugateGradient2(ReelA,Reelb,tmp_x)
-print( np.allclose(np.dot(ReelA, res_x), Reelb))
-tmp_x = np.zeros(j) 
+# from part1 import symetrik_generator
+# import random
+# ReelA = symetrik_generator(random.randint(0, 10),10)
+# print(ReelA)
+# Reelx = np.array([random.uniform(0, 10) for iter in range(10)])
+# Reelx = Reelx.reshape((10,1))
+# print(Reelx)
+# Reelb = np.dot(ReelA,Reelx)
+# print(Reelb)
+# tmp_x = np.zeros((10,1))
+# print("tmp_x :")
+# print(tmp_x.shape)
+# res_x = conjugateGradient2(ReelA,Reelb,tmp_x)
+# print( np.allclose(np.dot(ReelA, res_x), Reelb))
+
 
 ### Question 4 : Implementation de la methode du gradient conjugue avec preconditionneur
 
@@ -213,14 +211,14 @@ triangulaire_test = np.array([[6., -2., -1.],
 #                                    [-16.,  53.,  18.],
 #                                    [ -9.,  18.,  81.]])
 
-#res3 = conjugateGradientPrecond(matrice_test_1, triangulaire_test, vector_test_1, zeros_1)
-#res4 = conjugateGradientPrecond(matrice_test_2, triangulaire_test, vector_test_2, zeros_2)
-#print(res3)
-#print(res4)
-#print_res("Conjugate gradient (Precond) 1, is close to [ 3.861, -1.111,  4.167].",
- #         np.around(res3[0],3) == 3.861 and np.around(res3[1],3) == -1.111 and np.around(res3[2],3) == 4.167)
-#print_res("Conjugate gradient (Precond) 2, is close to [-1.570,  0.348, -0.732].",
- #         np.around(res4[0],3) == -1.570 and np.around(res4[1],3) == 0.348 and np.around(res4[2],3) == -0.732)
+# res3 = conjugateGradientPrecond(matrice_test_1, triangulaire_test, vector_test_1, zeros_1)
+# res4 = conjugateGradientPrecond(matrice_test_2, triangulaire_test, vector_test_2, zeros_2)
+# print(res3)
+# print(res4)
+# print_res("Conjugate gradient (Precond) 1, is close to [ 3.861, -1.111,  4.167].",
+#          np.around(res3[0],3) == 3.861 and np.around(res3[1],3) == -1.111 and np.around(res3[2],3) == 4.167)
+# print_res("Conjugate gradient (Precond) 2, is close to [-1.570,  0.348, -0.732].",
+#          np.around(res4[0],3) == -1.570 and np.around(res4[1],3) == 0.348 and np.around(res4[2],3) == -0.732)
 
 
 

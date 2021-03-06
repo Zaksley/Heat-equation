@@ -3,7 +3,7 @@ import numpy as np
 import random
 import math as m
 
-from part2 import conjugateGradient
+from part2 import conjugateGradient2
 from part1 import symetrik_generator
 
 
@@ -62,7 +62,7 @@ for j in range(200):
         Reelx = np.array([random.uniform(0, 10) for iter in range(j)])
         Reelb = np.dot(ReelA,Reelx)
         tmp_x = np.zeros(j) 
-        GuessedX = conjugateGradient(ReelA,Reelb,tmp_x)
+        GuessedX = conjugateGradient2(ReelA,Reelb,tmp_x)
         diff = np.absolute(np.dot(GuessedX-Reelx,np.ones(j)))
         tmp_y += diff
     y.append(tmp_y)
