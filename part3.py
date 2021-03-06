@@ -112,7 +112,7 @@ def imagepix_centre ( T, N ) :
                 if ( temp[i][j] <0 ) :
                     pix[i , j] = ( 0.04 , 0.05 , 0.06 )
                 else  :  
-                    print (" le coefficient du rouge ," , temp[i][j] / (len(str(maxi))) *255/(T*T) ) 
+                    # print (" le coefficient du rouge ," , temp[i][j] / (len(str(maxi))) *255/(T*T) ) 
                     pix[i,j] = ( int ( temp[i][j] / (len(str(maxi)) ) *255/(T*T)*10 ) , int (temp[i][j] / (len(str(maxi)) )* 6.9*10/(T*T) )  ,  0)  
                 
            # print ( "pixel " , i , j , "est " , pix[i , j ] , "\n" )
@@ -228,20 +228,23 @@ A=  temperature_centre( 4 , 25 )
 
 
 def imagehector ( N , T ) : 
-    temp = temperature_centre ( N , T ) 
+    temp = temperature_cote ( N , T ) 
     temp=temp.reshape (N , N )
     
     fig, ax = plt.subplots()
-    im = ax.imshow(temp) 
+    # im = ax.imshow(temp, cmap=plt.cm.hot) 
     # We want to show all ticks...
     X=np.linspace ( 0 , 1 , N+1 ) 
     Y=np.linspace ( 0 , 1 , N+1 )
-    ax.set_xticks(np.arange(len(X)))
-    ax.set_yticks(np.arange(len(Y))) 
+    # ax.set_xticks(np.arange(X))
+    # ax.set_yticks(np.arange(Y)) 
     
     ax.set_title("temperature ")
     fig.tight_layout()
+
+    plt.pcolor(temp, cmap=plt.cm.hot, vmin=0, vmax=50000)
+    # plt.colorbar()
     plt.show() 
 
 
-imagehector ( 20 , 100 )
+imagehector ( 50 , 1000 )
