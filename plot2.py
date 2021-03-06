@@ -52,22 +52,23 @@ def conjugateGradientIter(A, b, x, imax=10**6, precision=1e-10):
 # plt.plot(x,y)
 # plt.show()
 
-x = np.arange(0,200, 1)
+x = np.arange(0,50, 1)
 y = []
 
-for j in range(200):
+for j in range(50):
+    print(j)
     tmp_y = 0
     for k in range(50):
         ReelA = symetrik_generator(random.randint(0, j),j)
         Reelx = np.array([random.uniform(0, 10) for iter in range(j)])
+        Reelx = Reelx.reshape((j,1))
         Reelb = np.dot(ReelA,Reelx)
-        tmp_x = np.zeros(j) 
+        tmp_x = np.zeros((j,1)) 
         GuessedX = conjugateGradient2(ReelA,Reelb,tmp_x)
-        diff = np.absolute(np.dot(GuessedX-Reelx,np.ones(j)))
+        diff = np.linalg.norm(GuessedX-Reelx)
         tmp_y += diff
     y.append(tmp_y)
 
 plt.plot(x,y)
-# plt.semilogy(x,y)
 plt.yscale("log")
 plt.show()

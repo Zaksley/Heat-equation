@@ -39,7 +39,7 @@ tridiag ( 4 )
 def b_centre(N , T ):
    # X=np.linspace ( 0 , 1 , N+1 ) 
    # Y=np.linspace ( 0 , 1 , N+1 )
-    B=np.zeros ( (N*N , 1 ) ) ; 
+    B=np.zeros( (N*N,1) ) 
     B[ (N//2)*N + (N//2)] = T*(-1) 
     return (B) 
 
@@ -90,8 +90,9 @@ def graphe3d(N , f  ) :
     plt.close
 
 
+
+
 def imagepix_centre ( T, N ) :
-    
     size = (N,N)
     im = Image.new('RGB',(N , N ))
     print ("1  ça passe  ?")
@@ -143,6 +144,30 @@ def image ( T, N) :
 
 
 
+"""
+    BGR : Blue Green Red
+    temp :       [0, 50, 100, 150, 200]
+    temp color : [B, BG, G,   GR,  R]
+"""
+def tempToColor(t, B=0, G=1500, R=3000):
+    if t < B :
+        return (0,0,255)
+    if t > R : 
+        return (255,0,0)
+    r = 0
+    g = 0
+    b = 0
+    if t in [B,G]:
+        g = 0
+    # r = (t - G)*(t -(R+(R-G)))*-255
+    # g = (t - B)*(t - R)*-255
+    # b = (t - (B-(G-B)))*(t - G)*-255
+    # print(str(r)+" "+str(g)+" "+str(b))
+    return (int(r),int(g),int(b))
+        
+    
+
+
 def imagepix_cote ( T , N ) :
     
     size = (N,N)
@@ -154,12 +179,14 @@ def imagepix_cote ( T , N ) :
     
     for i in range(0 , size[0]):
         for j in range( 0 , size[1]):
-            if ( temp[i][j] < 1 and temp[i][j] > 0 ) :
-                pix[i , j] = ( int (temp[i][j] *255) , int (temp[i][j]*69) , 0 ) 
-            else : 
-                pix[i,j] = ( int ( temp[i][j] / maxi  *255 ) , int (temp[i][j] / maxi* 69 ) ,  0)  
-            if ( temp[i][j] *255 < 0 ) :
-                 pix[i , j] = ( int (temp[i][j] *255 *10 )*(-1) , int (temp[i][j]*69 *10) * (-1) , 0 )
+            print(str(i)+str(j))
+            pix[i,j] = tempToColor(temp[i][j])
+            # if ( temp[i][j] < 1 and temp[i][j] > 0 ) :
+            #     pix[i , j] = ( int (temp[i][j] *255) , int (temp[i][j]*69) , 0 ) 
+            # else : 
+            #     pix[i,j] = ( int ( temp[i][j] / len(str(maxi))  *255 ) , int (temp[i][j] / len(str(maxi))* 69 ) ,  0)  
+            # if ( temp[i][j] *255 < 0 ) :
+            #      pix[i , j] = ( int (temp[i][j] *255 *10 )*(-1) , int (temp[i][j]*69 *10) * (-1) , 0 )
            # print ( "pixel " , i , j , "est " , pix[i , j ] , "\n" )
     im.save('radiateurcote.png')
 
@@ -187,7 +214,7 @@ def temperature_cote ( N  , T ) :
    # for i in range ( 0 , N) :
     #        if ( tmp[i][i]!= 0 ) :
      #           print (" l'indice diagonale non nulle   " , i )
-    return conjugateGradient2( A , B , x, imax=10**6, precision=1e-10) 
+    return conjugateGradient2( A , B , x, imax=10**6, precision=1e-5) 
    # print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
     #return linalg.solve ( A , B )
 
