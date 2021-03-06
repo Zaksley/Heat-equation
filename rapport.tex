@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} %package to manage images
+\graphicspath{ {./images/} }
+
+%%%%%%%%%%%%%%%% Lengths %%%%%%%%%%%%%%%%
+\setlength{\textwidth}{15.5cm}
+\setlength{\evensidemargin}{0.5cm}
+\setlength{\oddsidemargin}{0.5cm}
+
+%%%%%%%%%%%%%%%% Variables %%%%%%%%%%%%%%%%
+\def\projet{2}
+\def\titre{Méthode du gradient conjugué / Application à l’équation de la chaleur}
+\def\groupe{4}
+\def\equipe{12468}
+\def\responsible{Enzo Médina}
+\def\secretary{Perig Herau}
+\def\others{Ghofrane Hamdouni, Hector Piteau}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%% Header %%%%%%%%%%%%%%%%
+\noindent\begin{minipage}{0.98\textwidth}
+  \vskip 0mm
+  \noindent
+  { \begin{tabular}{p{7.5cm}}
+      {\bfseries \sffamily
+        Projet \projet} \\ 
+      {\itshape \titre}
+    \end{tabular}}
+  \hfill 
+  \fbox{\begin{tabular}{l}
+      {~\hfill \bfseries \sffamily Groupe \groupe\ - Equipe \equipe
+        \hfill~} \\[2mm] 
+      Responsable : \responsible \\
+      Secrétaire : \secretary \\
+      Codeurs : \others
+    \end{tabular}}
+  \vskip 4mm ~
+
+  ~~~\parbox{0.95\textwidth}{\small \textit{Résumé~: Dans ce projet nous cherchons à implémenter des algorithmes, direct et itératifs, de résolution de systèmes linéaires Ax = b avec A de grande taille. Nous allons nous intéresser tout particulièrement aux systèmes linéaires symétriques définis positifs et creux et discuter des efficacités et complexités de ces algorithmes.  } \sffamily  }
+  \vskip 1mm ~
+\end{minipage}
+
+%%%%%%%%%%%%%%%% Main part %%%%%%%%%%%%%%%%
+\section*{Présentation du travail réalisé}
+    Dans la suite de ce rapport, nous allons vous présenter le travail que nous avons réalisé au cours du projet. Puis nous conclurons avec un retour sur le gain d'expérience que nous a apporté ce projet. 
+\subsection*{Décomposition de Cholesky} 
+    Cette partie a pour objectif d'écrire une méthode de factorisation en utilisant la décomposition de Cholesky classique, puis incomplète. \\
+    
+    1) Dans un premier temps, on s'occupe de la décomposition classique.
+    Elle est défini par FORMULE \\
+    
+    Étant donné qu'on parcours chaque élément de la matrice [$O(n^{2}$] et que les éléments diagonaux nécessite d'accéder à l'ensemble des éléments de la ligne [$O(n)$]. On peut donc assimiler cet algorithme à une complexité $O(n^{3})$.
+    
+    2)
+
+
+    3) On prends 2 paramètres pour créer la matrice :
+\begin{enumerate}
+    \item N : Ce paramètre nous permet de connaître le nombre d'éléments extra diagonaux non nuls souhaité. Étant donné que la matrice retourné est symétrique, on considère uniquement le côté supérieur (ou inférieur) de la matrice pour la valeur de N. Ainsi, on a $0 <= N <= n*(n-1)/2$ avec n la taille de la matrice. \\
+    
+    \item Size : Paramètre permettant de définir la taille souhaitée de la matrice retournée. On a besoin d'un seul paramètre car on retourne une matrice carrée. Très utile pour les différents tests. \\
+\end{enumerate}
+    
+On souhaite retourner une matrice symétrique. Pour cela, on utilise le fait que la somme d'une matrice et de sa transposée retourne une matrice symétrique ($A = B + Bt$ implique A symétrique). \\
+
+Pour s'assurer que la matrice est bien définie positive, on assigne aux éléments diagonaux des valeurs tels qu'elles soient supérieures à la somme des valeurs absolues d'une même ligne (c'est une condition suffisante). Les termes extra diagonaux sont eux assignés aléatoirement par la fonction \textit{randint}. \\
+
+Enfin, il s'agit de gérer le nombre de termes extra diagonaux non nuls, le paramètre N. On l'utilise pour déterminer le nombre de 0 dans la matrice. On assigne alors à la matrice ces valeurs nulles aux positions (i,j) mais également aux positions (j, i) pour conserver la symétrique de la matrice.
+    
+  4)
+  
+  La factorisation incomplète de Cholesky est très similaire à la factorisation classique. Il suffit simplement de vérifier si on a des éléments nuls dans la matrice d'origine, auquel cas on retourne 0 à la même position pour la matrice générée. \\
+  
+  Nous avons essayé plusieurs tests de performances :
+  \begin{enumerate}
+      \item Une génération de 1000 matrices de petites tailles (3 et 4). \\
+      Les temps d'exécution des factorisations classiques et incomplètes sont très similaires (au centième de seconde près).
+      Dans le cas de matrices contenant uniquement des 0 dans les éléments diagonaux, on remarque que la factorisation incomplète est à peine meilleur. A l'inverse, dans le cas de matrices sans termes nuls, c'est la factorisation classique qui est un tout petit peu plus performante ce qui est logique car on rajoute un test dans la version incomplète. \\
+      
+      \item Une unique matrice de très grande taille (700 x 700) \\
+      Avec une matrice entièrement rempli d'éléments extra diagonaux nuls, le résultat est sans appel : \textbf{27s de temps d'exécution par la factorisation classique contre 0.2s pour la factorisation incomplète}.
+      En revanche, pour des matrices ne contenant pas de 0, elles restent équivalentes.
+  \end{enumerate}
+  
+  On comprends alors tout l'intérêt de chercher à réduire les matrices pour obtenir un maximum d'éléments extra diagonaux nuls. Les calculs sont bien plus rapide (Dans le cas de notre matrice 700 * 700, on parle d'une méthode 100 fois meilleure). \\
+  
+5)
+On définit une fonction pour obtenir le conditionnement du produit tT-1 * T (FORMULE) et le conditionnement classique de A. Les résultats sont très proches (précision 10-8). Cependant, on remarque que pour la moitié des tests, le conditionnement calculé est supérieur au conditionnement de A. C'est donc un mauvais préconditionneur. L'autre moitié du temps, il est donc inférieur et correspond à un bon préconditionneur.
+
+
+    
+\subsection*{Méthode du gradient conjugué}
+    Dans cette partie nous avons implémenté l'algorithme itératif de la méthode du gradient conjugué de Wikipedia \cite{gradconjugwiki}.
+    \\ \\
+    Tout d'abord, il nous a été donné dans le sujet une implémentation Matlab dans laquelle nous avons relevé certains non respect d'un standard de programmation sain. Parmi ces derniers, nous avons relevé que les noms des variables ne sont pas toujours explicite ce qui freine la compréhension de l'algorithme. De plus le seuil de précisions constituant la condition d'arrêt est inscrit en dur dans l'algorithme. Il est donc impossible de le changer au cours de l'exécution.
+    \\ \\
+    La première méthode est est une implémentation directe. (parler de complexité)
+\subsection*{Application à l’équation de la chaleur}
+    Cette partie a pour but de mettre en oeuvre les deux précédente parties afin de résoudre une équation aux dérivées partielles, l'équation de la chaleur. Le but étant de simuler l'évolution de la température sur une grille de points.
+
+- Ajouter des images pour représenter la diffusion de la chaleur
+
+\begin{thebibliography}{9}
+\bibitem{gradconjugwiki} 
+Algorithme de la décomposition de Cholesky sur Wikipedia.
+\\\texttt{https://en.wikipedia.org/wiki/Conjugate\_gradient\_method}
+\end{thebibliography}
+
+
+\end{document}
