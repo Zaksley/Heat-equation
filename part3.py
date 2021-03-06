@@ -39,7 +39,7 @@ tridiag ( 4 )
 def b_centre(N , T ):
    # X=np.linspace ( 0 , 1 , N+1 ) 
    # Y=np.linspace ( 0 , 1 , N+1 )
-    B=np.zeros ( (N*N) ) ; 
+    B=np.zeros ( (N*N , 1 ) ) ; 
     B[ (N//2)*N + (N//2)] = T*(-1) 
     return (B) 
 
@@ -54,19 +54,18 @@ def b_centre(N , T ):
 
 
 from part2 import conjugateGradient2 
-def temperature_centre ( N  , T ) :
+def temperature_centre( N  , T ) :
     A=tridiag (N) # construction de A 
     B= b_centre( N , T)
     t=np.eye  (N )
     x=t.reshape ( N*N , 1 ) 
+   # TE = np.eye ( N )
     #tmp=conjugateGradient( A , B , x, imax=10**6, precision=1e-10)
     #tmp=tmp.reshape( N ,N )
    # for i in range ( 0 , N) :
     #        if ( tmp[i][i]!= 0 ) :
      #           print (" l'indice diagonale non nulle   " , i )
-    return conjugateGradient2( A , B , x, imax=10**6, precision=1e-10) 
-    #print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
-    # return linalg.solve ( A , B )
+    return conjugateGradient2( A ,  B , x, imax=10**6, precision=1e-10) 
 
 
 
@@ -95,20 +94,26 @@ def imagepix_centre ( T, N ) :
     
     size = (N,N)
     im = Image.new('RGB',(N , N ))
+    print ("1  ça passe  ?")
     pix = im.load() 
+    print (" 2 ça passe ?")
     temp = temperature_centre( N , T ) 
+    print (" 3 ça passe ?")
     temp=temp.reshape (N , N )
     temp=temp.T
     maxi=np.amax ( temp )
-    
+    print (" ça passe ?")
     for i in range(0 , size[0]):
         for j in range( 0 , size[1]):
-            if ( temp[i][j] < 1 ) :
-                pix[i , j] = ( int (temp[i][j] *255) , int (temp[i][j]*69) , 0 ) 
-            else : 
-                pix[i,j] = ( int ( temp[i][j] / maxi  *255 ) , int (temp[i][j] / maxi* 69 ) ,  0)  
-            if ( temp[i][j] *255 < 1) :
-                 pix[i , j] = ( int (temp[i][j] *255 *10 )*(-1) , int (temp[i][j]*69 *10) * (-1) , 0 )
+            #if ( temp[i][j] < 1 ) :
+            #    pix[i , j] = ( int (temp[i][j] *255) , int (temp[i][j]*69) , 0 ) 
+           # else : 
+                if ( temp[i][j] <0 ) :
+                    pix[i , j] = ( 0.04 , 0.05 , 0.06 )
+                else  :  
+                    print (" le coefficient du rouge ," , temp[i][j] / (len(str(maxi))) *255/(T*T) ) 
+                    pix[i,j] = ( int ( temp[i][j] / (len(str(maxi)) ) *255/(T*T)*10 ) , int (temp[i][j] / (len(str(maxi)) )* 6.9*10/(T*T) )  ,  0)  
+                
            # print ( "pixel " , i , j , "est " , pix[i , j ] , "\n" )
     im.save('radiateuraucentre.png')
 
@@ -164,7 +169,7 @@ def imagepix_cote ( T , N ) :
 def b_cote(N , T ):
    # X=np.linspace ( 0 , 1 , N+1 ) 
    # Y=np.linspace ( 0 , 1 , N+1 )
-    B=np.zeros ( (N*N) ) 
+    B=np.zeros ( (N*N , 1 ) ) 
     for i in range ( N) :
         B[ (N-1)*N + i ] = T*(-1) 
     return (B) 
@@ -184,9 +189,32 @@ def temperature_cote ( N  , T ) :
      #           print (" l'indice diagonale non nulle   " , i )
     return conjugateGradient2( A , B , x, imax=10**6, precision=1e-10) 
    # print ("avec la fct prédifinie" ,  linalg.solve ( A , B ) ) 
-    # return linalg.solve ( A , B )
+    #return linalg.solve ( A , B )
 
 
 
-imagepix_cote ( 100, 20) 
-imagepix_centre ( 100, 20)
+#imagepix_cote ( 20, 8) 
+imagepix_centre ( 1000, 20) 
+A=  temperature_centre( 4 , 25 ) 
+#print (A)
+
+
+
+def imagehector ( N , T ) : 
+    temp = temperature_centre ( N , T ) 
+    temp=temp.reshape (N , N )
+    
+    fig, ax = plt.subplots()
+    im = ax.imshow(temp) 
+    # We want to show all ticks...
+    X=np.linspace ( 0 , 1 , N+1 ) 
+    Y=np.linspace ( 0 , 1 , N+1 )
+    ax.set_xticks(np.arange(len(X)))
+    ax.set_yticks(np.arange(len(Y))) 
+    
+    ax.set_title("temperature ")
+    fig.tight_layout()
+    plt.show() 
+
+
+imagehector ( 20 , 100 )
