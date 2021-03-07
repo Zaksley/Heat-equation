@@ -6,7 +6,21 @@ from mpl_toolkits.mplot3d import Axes3D
 import PIL
 PIL.__version__ 
 from PIL import Image
-" Pour la premiére question la méthode est expliquée dans le rapport "
+" Pour la premiére question : " 
+	
+   "t ( i , j ) = 4 *b(i , j ) * h^2 - t(i+1 , j) - t(i-1 , j)-t(i , j+1)-t(i , j-1)) "
+   	
+   "les indices des coefficients varient entre [ i-1 , i+1 ] et [ j-1 , j+1] "
+   "ce qui induit nécessairement lutilisation des blocs tridiagonales . En effet  , "
+    "soit j fixe dans [0 ,N ]"
+   	"t(j,1) = a*t(j+1 , 1) + b*t(j+1,1) + c*t(j+1,0)"
+   	
+    "t(j,2) = a*t(j+1 , 2) + b*t(j+1,2) + c*t(j+1,1)"
+ 
+    "t(j,3) = a*t(j+1 , 3) + b*t(j+1,3) + c*t(j+1,2) "
+   
+   	
+   "t(j,n-1) = a*t(j+1 , n-1) + b*t(j+1,n-1) + c*t(j+1,n-2) "
 
 
 "La construction de la matrice tridiagonale par bloc "
