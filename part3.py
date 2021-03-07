@@ -228,7 +228,7 @@ A=  temperature_centre( 4 , 25 )
 
 
 def imagehector ( N , T ) : 
-    temp = temperature_cote ( N , T ) 
+    temp = temperature_centre ( N , T ) 
     temp=temp.reshape (N , N )
     
     fig, ax = plt.subplots()
@@ -247,4 +247,4 @@ def imagehector ( N , T ) :
     plt.show() 
 
 
-imagehector ( 50 , 1000 )
+imagehector ( 100 , 25 )
