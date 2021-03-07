@@ -113,7 +113,7 @@ Enfin, il s'agit de gérer le nombre de termes extra diagonaux non nuls, le para
     
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\columnwidth]{TODO.png}
+   % \includegraphics[width=0.7\columnwidth]{TODO.png}
     \caption{...}
     \label{fig:conj_precond}
 \end{figure}
@@ -123,7 +123,134 @@ Enfin, il s'agit de gérer le nombre de termes extra diagonaux non nuls, le para
     
     
 \subsection*{Application à l’équation de la chaleur}
-    Cette partie a pour but de mettre en oeuvre les deux précédente parties afin de résoudre une équation aux dérivées partielles, l'équation de la chaleur. Le but étant de simuler l'évolution de la température sur une grille de points.
+    Cette partie a pour but de mettre en oeuvre les deux précédente parties afin de résoudre une équation aux dérivées partielles, l'équation de la chaleur. Le but étant de simuler l'évolution de la température sur une grille de points. 
+    L’intérêt de ce présent travail est de résoudre cette équation différentielle par la méthode des différences finies et l’implémenter en python.
+    Pour cela, nous commencerons par présenter la méthode des différences finies dans un
+    premier temps : 
+    \paragraph{} 
+    Les méthodes des différences finie est une technique de recherche de solutions approchées d’équations aux dérivées partielles qui consiste à résoudre un système de relations (schéma numérique) liant les valeurs des fonctions inconnues en certains points suffisamment proches les uns des autres. 
+   \begin{enumerate}
+   	\item { Approximation des dérivées }
+   	\paragraph{}
+   
+ 	Pour la dérivée seconde par rapport au sous-jacent $ x_{\i}$ au point $ x_{\i}$ en utilisant une approximation centrée basée sur la formule de Taylor  on aura alors : 
+   	
+   $	$$\frac{\partial^2 t}{\partial x^2}$$  = $$\frac{t( xj + dx , yj ) - 2*t( xj , yj ) + t( xj-dx , yj)}{(dx)^2 }$$ $ 
+   
+   \paragraph{}
+   	En remplaçant les termes de l'équation %add reference de l'equation de la chaleur 
+   	on aura après simplification du calcul :
+   	
+   	$t ( i , j ) = 4 *b(i , j ) * h^2 - t(i+1 , j) - t(i-1 , j)-t(i , j+1)-t(i , j-1))$ 
+   	
+   	les indices des coefficients varient entre [ i-1 , i+1 ] et [ j-1 , j+1] 
+   	ce qui induit nécessairement l'utilisation des blocs tridiagonales . En effet  , 
+   	soit j $\in$ [0 , N] fixe 
+   	\paragraph{}
+   	$t(j,1) = a*t(j+1 , 1) + b*t(j+1,1) + c*t(j+1,0)$
+   	\paragraph{}
+    $t(j,2) = a*t(j+1 , 2) + b*t(j+1,2) + c*t(j+1,1)$
+    \paragraph{}
+    $t(j,3) = a*t(j+1 , 3) + b*t(j+1,3) + c*t(j+1,2)$ 
+    \paragraph{}
+    .
+    \paragraph{} 
+    .
+    \paragraph{}
+   	
+   $t(j,n-1) = a*t(j+1 , n-1) + b*t(j+1,n-1) + c*t(j+1,n-2)$ 
+   
+   \paragraph{} 
+   Ce qui explique que le problème peut se mettre alors sous la forme d'un système linéaire $Ax=b$ où la matrice A est une matrice tridiagonale par blocs 
+   de taille $N^2$x$N^2$ avec chaque diagonale est remplie respectivement par a , b , c ( dans ce cas 1 , -4 , 1 )  
+   \paragraph{}
+   \item{implémentation python} 
+ 	\paragraph{} 
+ 	Pour pouvoir appliquer les méthodes du gradient conjugué pour la résolution il faut commencer par introduire les matrices A , B et T . 
+ 	\begin{enumerate}
+ 		\item { La Matrice A } 
+ 		\paragraph{}
+ 		La matrice A est une matrice tridiagonale par blocs . En partant d'une matrice diagonale en utilisant la bibliothèque numpy , on ajoute une autre matrice de diagonale supérieure d'ordre 1 et sa transposée puis on annule des  termes pour avoir des blocs diagonaux .
+ 		\textbf{ la transposée n'est pas une opération linéaire } 
+ 		Pour la construction de A , l'algorithme est de complexité O( $N^4)$ 
+ 		\item{La Matrice B} 
+ 		\paragraph{}
+ 		La matrice B se déduit du second membre de l'équation . 
+ 		Pour la construction de B , l'algorithme est de complexité O( $N^2)$   
+ 	\end{enumerate}
+   \begin{enumerate} 
+   	\item { Résolution pour un radiateur au centre }  
+   	%%%inclure le graphe 1 et 2 
+   	\item{Résolution pour un radiateur mis au nord } 
+   	%%%inclure graphe 3 , 4 
+   \end{enumerate}
+   
+   
+   
+   
+   
+   \paragraph{}
+    Une telle résolution est couteuse en temps : 
+    \paragraph{}
+   Le temps d'exécution du programme est proportionnelle à la valeur de $N^2$x$N^2$ . or Python est à typage dynamique et est interprété et non compilé ce  qui fait qu'il est  est 'lent'. 
+   \item{Pour aller plus loin  } 
+   \paragraph{}
+   Une équation de la forme  : 
+   \paragraph{}
+   $A $$\frac{\partial^2 t}{\partial x^2}$$ + B	$$\frac{\partial^2 t}{\partial x^2 \partial y^2}$$ + C 	$$\frac{\partial^2 t}{\partial y^2}$$ +G = 0 $ 
+  \paragraph{}
+   avec dans ce cas B est nulle est elliptique puisque $ B - 4 xAC < 0 $ 
+   Cela signifie que l’on calcule UN CHAMP U : il faut calculer la valeur de U en tout
+   point de l’espace . 
+   la dépendances des termes en( i , j) ( i-1 , j) ( i+1 , j) ( i , j+1 ) et ( i , j-1) 
+   induit des décalages lignes et colonnes . 
+   \paragraph{}
+   Mais pour décaler les colonnes Le seul moyen est d’utiliser la transposée : 
+   Décaler d’une colonne : décaler les lignes de la transposée et prendre la
+   transposé du résultat
+  
+   \textbf{PROBLEME!! }
+   \paragraph{}  
+   La transposition de matrice n’EST PAS une opération linéaire
+   \paragraph{}
+   Une équation du type : $A X + B X.T = C $ n’est pas une opération linéaire .
+   Donc on ne peut pas  écrire simplement ce problème sous la forme d’une Simple multiplication de matrices . 
+   On peut s’en sortir en écrivant un système de $N^2$ équations à $N^2$ inconnus . 
+   Ce qui illustre bien la méthode utilisée dans cette partie . 
+   \textbf{On voit donc que les équations elliptiques sont très coûteuses en mémoire et
+   en calcul} 
+  \item { Introduction aux approches spectrales } 
+  \paragraph{}
+  En se limitant à des opérations mathématiques qu'on appelle convolution la base des transformées de Fourier  : 
+  \paragraph{}
+  Soient T*= TF(T), Lap*=TF(lap) , f*=TF (f) 
+  \paragraph{}
+  où TF signifie « transformée de fourrier 
+  \paragraph{}
+  T*xLap*= f
+  \paragraph{}
+  T*= $\frac{f*}{Lap*}$ 
+  \paragraph{}
+  T = TF-1 ($\frac{f*}{Lap*}$)  
+  \textbf{ AVANTAGE : l’algorithme FFT est très rapide (en Nlog(N) )} 
+  
+  
+  
+  
+  
+  Les approches spectrales, qui passent par une Transformée de Fourier , sont souvent les plus
+  rapides (grâce à l’algorithme FFT) . 
+  
+   
+   
+   
+   
+   
+   \end{enumerate} 
+
+   
+  
+   
     
 
 %%%%%%%%%%%%%%%% End part %%%%%%%%%%%%%%%%
