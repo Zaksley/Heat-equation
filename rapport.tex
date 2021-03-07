@@ -191,9 +191,79 @@ Enfin, il s'agit de gérer le nombre de termes extra diagonaux non nuls, le para
  	\end{enumerate}
    \begin{enumerate} 
    	\item { Résolution pour un radiateur au centre }  
-   	%%%inclure le graphe 1 et 2 
+   	   
+   	\paragraph{}
+   	\begin{figure}
+   		\begin{minipage}[c]{.46\linewidth}
+   			\centering
+   			\includegraphics[width=6cm,height=6cm]{centreN50T5.png}
+   			\caption{Illustration pour N=50 , T=5° }
+   			\label{radiateur au centre (N=50 , T=5)}
+   	\end{minipage} \hfill 
+  
+   	\begin{minipage}[c]{.46\linewidth}
+   		\centering
+   		\includegraphics[width=6cm,height=6cm]{centreN50T25.png}
+   		\caption{illustration pour N=50 , T=25}
+   		\label{radiateur au centre (N=50 , T=25 )}
+  	\end{minipage} \hfill
+
+
+	\begin{minipage}[c]{.46\linewidth}
+		\centering
+		\includegraphics[width=6cm,height=6cm]{centreN100T25.png}
+		\caption{Illustration pour N=100 ,T=25 }
+		\label{radiateur au centre (N=100 , T=25 ) }
+	\end{minipage} \hfill
+\end{figure} 
+
+\paragraph{Commentaires } 
+On voit bien que le résultat est cohérent pour un même N  . 
+A une même température pour N=100 la température est plus élevée au centre que pour N=50 . 
+Ce qui explique que pour des grandes valeurs de N , la résolution est plus précise puisque elle se fait en tout point de l'espace .  
+\paragraph{}
    	\item{Résolution pour un radiateur mis au nord } 
-   	%%%inclure graphe 3 , 4 
+   	\paragraph{}
+   	\begin{figure}
+   		\begin{minipage}[c]{.46\linewidth}
+   			\centering
+   			\includegraphics[width=6cm,height=6cm]{coteN100T5.png}
+   			\caption{Illustration pour N=100 T=5° }
+   			\label{radiateur sur le cote ( N=100 ,T=5°)}
+   		\end{minipage} \hfill
+ 
+   	\begin{minipage}[c]{.46\linewidth}
+   		\centering
+   		\includegraphics[width=6cm,height=6cm]{coteN100T20.png}
+   		\caption{Illustration pour N=100 T=20 }
+   		\label{radiateur sur le cote ( N=100 , T=20 )}
+   	\end{minipage} \hfill
+
+	\begin{minipage}[c]{.46\linewidth}
+		\centering
+     	\includegraphics[width=6cm,height=6cm]{coteN50T20.png}
+		\caption{Illustration pour N=50 , T=20° }
+		\label{radiateur sur le cote (N=50 , T=20)}
+	\end{minipage} \hfill
+\end{figure} 
+\paragraph{commentaires } 
+On voit bien que le résultat est cohérent pour un même N  . 
+\paragraph{}
+A une même température pour N=100 la température est plus élevée au centre que pour N=50 . 
+Ce qui explique que pour des grandes valeurs de N , la résolution est plus précise puisque elle se fait en tout point de l'espace . 
+
+
+
+\item{Commentaires sur les deux cas d'illustration } 
+\begin{itemize}
+
+\item {Dans les deux cas de la mise en place du radiateur , la différence situe essentiellement à la modification de la matrice du second membre qui est le B . }
+\item{ Pour une valeur de N suffisamment grande  , dans l'une des mises en place du radiateur , pour une valeur faible de T( valeur du second membre de l'équation ) , la résolution est moins précise . En effet , prenant l'exemple le produit d'une ligne L1 (1 , $N^2$ ) et d'une colonne C1  ( $N^2$ , 1 ) pour vérifier l'égalité : $ L1*C1 = 5 $ 
+	\paragraph{} 
+la multiplication entre les termes et l'addition des valeurs proches  augmentent les erreurs }
+
+\end{itemize}
+  
    \end{enumerate}
    
    

@@ -6,17 +6,21 @@ from mpl_toolkits.mplot3d import Axes3D
 import PIL
 PIL.__version__ 
 from PIL import Image
+" Pour la premiére question la méthode est expliquée dans le rapport "
 
+
+"La construction de la matrice tridiagonale par bloc "
 def tridiag (N ):
     N2=N*N 
-    A=np.diag ( [-4]*N2 ) 
+    A=np.diag ( [-4]*N2 )  #On commence par définir la diagonale principale 
 
-    B=np.eye ( N2 , N2 , 1)
-    for i in range (1 , N):
+    B=np.eye ( N2 , N2 , 1) #La diagonale supérieure des blocs supérieurs 
+    for i in range (1 , N): #Annulation des termes pour conserver une matrice tridiagonale par blocs 
         B[i*(N-1)][i*N]=0  
-    C=B.T  
-    D=np.eye (N2 , N2 , N)
-    E=D.T
+    C=B.T  #la diagonale inférieure des blocs supérieurs  
+   
+    D=np.eye (N2 , N2 , N) #La diagonale  supérieurs des blocs inférieurs  
+    E=D.T #la diagonale inférieure des blocs inférieurs 
     A=A+B+C+D+E 
     
     A=A/((N+1)**2)
@@ -24,11 +28,12 @@ def tridiag (N ):
 
     return (A)
 
-tridiag ( 4 )
 
 
 
-" Pour un radiateur au centre "
+
+" Pour un radiateur au centre " 
+#construction de la matrice colonne du second membre 
 
 def b_centre(N , T ):
     B=np.zeros( (N*N,1) ) 
@@ -46,7 +51,7 @@ def temperature_centre( N  , T ) :
     B= b_centre( N , T) # construction de b 
     t=np.eye  (N ) 
     x=t.reshape ( N*N , 1 ) 
-    return conjugateGradient2( A ,  B , x, imax=10**6, precision=1e-10) 
+    return conjugateGradient2( A ,  B , x, imax=10**6, precision=1e-10) #appel a conjugateGradient
 
 
 " Image correspondante "
@@ -69,7 +74,7 @@ def imagecentre ( N , T ) :
 
 " Pour un radiateur mis au nord "
 
-
+#construction de la matrice colonne du second membre 
 def b_cote(N , T ):
     B=np.zeros ( (N*N , 1 ) ) 
     for i in range ( N) :
